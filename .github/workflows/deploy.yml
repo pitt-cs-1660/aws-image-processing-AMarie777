@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: us-east-1  # update if you are in a different region
-  AWS_LAMBDA_ROLE_ARN: arn:aws:iam::523734927941:role/lambda-image-processing-role  # replace with your ARN
+  AWS_LAMBDA_ROLE_ARN: arn:aws:iam::059941826780:role/image-processing-lambda-role # replace with your ARN
 
 jobs:
   deploy-resize:
@@ -40,12 +40,15 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           cd lambdas/resize
-          ######
-          #
-          #  TODO: implement build and push to ECR
-          #
-          ######
-          exit 1
+  
+          ECR_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+          echo "Building Docker image for Resize Lambda..."
+          docker build -t $ECR_IMAGE .
+
+          echo "Pushing image to ECR..."
+          docker push $ECR_IMAGE
+          echo "image=$ECR_IMAGE" >> $GITHUB_OUTPUT
 
       - name: Check if Lambda function exists
         id: check-lambda-resize
@@ -112,12 +115,15 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           cd lambdas/greyscale
-          ######
-          #
-          #  TODO: implement build and push to ECR
-          #
-          ######
-          exit 1
+          ECR_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+          echo "Building Docker image for Greyscale Lambda..."
+          docker build -t $ECR_IMAGE .
+
+          echo "Pushing image to ECR..."
+          docker push $ECR_IMAGE
+
+          echo "image=$ECR_IMAGE" >> $GITHUB_OUTPUT
 
       - name: Check if Lambda function exists
         id: check-lambda-greyscale
@@ -185,12 +191,15 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           cd lambdas/exif
-          ######
-          #
-          #  TODO: implement build and push to ECR
-          #
-          ######
-          exit 1
+          ECR_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+          echo "Building Docker image for EXIF Lambda..."
+          docker build -t $ECR_IMAGE .
+
+          echo "Pushing image to ECR..."
+          docker push $ECR_IMAGE
+
+          echo "image=$ECR_IMAGE" >> $GITHUB_OUTPUT
 
       - name: Check if Lambda function exists
         id: check-lambda-exif

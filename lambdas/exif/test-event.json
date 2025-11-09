@@ -1,0 +1,10 @@
+﻿{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "Sns": {
+        "Message": "{\"Records\":[{\"s3\":{\"bucket\":{\"name\":\"amarie777-assignment3-227363022\"},\"object\":{\"key\":\"exif/test-image.jpg\"}}}]}"
+      }
+    }
+  ]
+}

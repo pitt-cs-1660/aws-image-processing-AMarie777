@@ -8,3 +8,9 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 # TODO: implement the rest of the image
 #
 ############
+WORKDIR /var/task
+COPY pyproject.toml ./
+RUN uv sync --no-dev || (echo "no lock or deps, continuing" && true)
+COPY handler.py ./
+ENV PYTHONPATH="/var/task/.venv/lib/python3.13/site-packages:/var/task"
+CMD ["handler.greyscale_handler"]
